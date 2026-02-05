@@ -34,4 +34,5 @@ def forgot_reset(): return LoginHandler.reset_password()
 print("Server is running...")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+
+    app.run(host='0.0.0.0', port=5000, debug=False)
