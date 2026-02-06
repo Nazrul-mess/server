@@ -2,7 +2,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from signup import SignupHandler
-from signin import signinHandler
+from signin import SigninHandler
 from database import Database
 import os
 
@@ -29,13 +29,13 @@ def resend_signup(): return SignupHandler.resend_signup_otp()
 
 # Signin & Reset Routes
 @app.route('/api/signin', methods=['POST'])
-def signin(): return signinHandler.signin()
+def signin(): return SigninHandler.signin()
 
 @app.route('/api/forgot-password/request', methods=['POST'])
-def forgot_req(): return signinHandler.request_password_reset()
+def forgot_req(): return SigninHandler.request_password_reset()
 
 @app.route('/api/forgot-password/reset', methods=['POST'])
-def forgot_reset(): return signinHandler.reset_password()
+def forgot_reset(): return SigninHandler.reset_password()
 
 print("Server is running...")
 
