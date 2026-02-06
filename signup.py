@@ -104,7 +104,7 @@ class SignupHandler:
             cursor.execute("DELETE FROM pending_users WHERE email = %s", (email,))
             cursor.execute("DELETE FROM otp_verification WHERE email = %s AND type = 'signup'", (email,))
             conn.commit()
-            return jsonify({'success': True, 'message': 'Account verified! You can now login.'}), 200
+            return jsonify({'success': True, 'message': 'Account verified! You can now sign in.'}), 200
         
         return jsonify({'success': False, 'message': 'User data not found'}), 404
 
