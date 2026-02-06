@@ -1,14 +1,21 @@
-from flask import Flask
+# main.py
+from flask import Flask, jsonify
 from flask_cors import CORS
 from signup import SignupHandler
-from login import LoginHandler
+from signin import signinHandler
 from database import Database
+import os
 
 db = Database()
 db.create_tables()
 
 app = Flask(__name__)
 CORS(app)
+
+# Add health check endpoint
+@app.route('/api/health')
+def health_check():
+    return jsonify({'status': 'healthy', 'service': 'Secure Auth API'}), 200
 
 # Signup Routes
 @app.route('/api/signup', methods=['POST'])
@@ -20,19 +27,18 @@ def verify_signup(): return SignupHandler.verify_otp()
 @app.route('/api/signup/resend', methods=['POST'])
 def resend_signup(): return SignupHandler.resend_signup_otp()
 
-# Login & Reset Routes
-@app.route('/api/login', methods=['POST'])
-def login(): return LoginHandler.login()
+# Signin & Reset Routes
+@app.route('/api/signin', methods=['POST'])
+def signin(): return signinHandler.signin()
 
 @app.route('/api/forgot-password/request', methods=['POST'])
-def forgot_req(): return LoginHandler.request_password_reset()
+def forgot_req(): return signinHandler.request_password_reset()
 
 @app.route('/api/forgot-password/reset', methods=['POST'])
-def forgot_reset(): return LoginHandler.reset_password()
+def forgot_reset(): return signinHandler.reset_password()
 
-#print server is active 
 print("Server is running...")
 
 if __name__ == '__main__':
-
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
