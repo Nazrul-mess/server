@@ -7,9 +7,10 @@ from datetime import datetime, timedelta
 rec_fun = RequirementFunctions()
 db = Database()
 
-class LoginHandler:
+class SigninHandler:
     @staticmethod
-    def login():
+    def signin():
+        
         data = request.json
         email = data.get('email')
         password = data.get('password')
@@ -19,8 +20,21 @@ class LoginHandler:
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
         
+        # if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+        #     return jsonify({'success': True, 'message': 'sign in successful!', 'user': {'name': user['full_name']}}), 200
+
+        # Inside login.py -> LoginHandler.login()
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-            return jsonify({'success': True, 'message': 'Login successful!', 'user': {'name': user['full_name']}}), 200
+            return jsonify({
+                'success': True, 
+                'message': 'Login successful!', 
+                'user': {
+                    'name': user['full_name'],
+                    'email': user['email'],
+                    'dob': str(user['date_of_birth']), # Format for JSON
+                    'photo': user['photo'] 
+                }
+            }), 200
         
         return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
 
